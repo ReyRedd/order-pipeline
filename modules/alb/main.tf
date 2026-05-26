@@ -1,5 +1,5 @@
 ################################################################################
-# Data sources — reuse the default VPC so we don't need to create networking
+# Data sources —- reuse the default VPC so we don't need to create networking
 ################################################################################
 
 data "aws_vpc" "default" {
@@ -20,7 +20,7 @@ data "aws_subnets" "default" {
 }
 
 ################################################################################
-# Security Group — controls what traffic reaches the ALB
+# Security Group - controls what traffic reaches the ALB
 ################################################################################
 
 resource "aws_security_group" "alb" {
