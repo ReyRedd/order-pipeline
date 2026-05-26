@@ -64,7 +64,7 @@ aws configure
 
 ```
 order-pipeline/
-├── main.tf                        # Root — wires all modules
+├── main.tf                        # Root - wires all modules
 ├── variables.tf
 ├── outputs.tf
 ├── modules/
