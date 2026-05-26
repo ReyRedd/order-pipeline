@@ -1,0 +1,9 @@
+# Terraform state — never commit these
+*.tfstate
+*.tfstate.backup
+.terraform/
+builds/
+
+# Credentials — just in case
+*.pem
+*.key
