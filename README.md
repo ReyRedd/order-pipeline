@@ -239,10 +239,12 @@ A completed order will have these extra fields written by the processor:
 
 ## Results
 
-### Successful Order — DynamoDB enriched record
+### Successful Order - DynamoDB enriched record
+![Request Order](docs/screenshots/request_order.png)
 ![Completed Order](docs/screenshots/completed_order.png)
 
-### Fraud Detection — Bad Actor blocked
+### Fraud Detection - Bad Actor blocked
+![Request Failed Order](docs/screenshots/failed_order_request.png)
 ![Fraud Failed](docs/screenshots/fraud_failed.png)
 
 ---
