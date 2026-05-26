@@ -4,12 +4,12 @@ variable "api_name" {
 }
 
 variable "lambda_invoke_arn" {
-  description = "Lambda invoke ARN — used by API Gateway to call the function"
+  description = "Lambda invoke ARN - used by API Gateway to call the function"
   type        = string
 }
 
 variable "lambda_arn" {
-  description = "Lambda function ARN — used to grant invoke permission"
+  description = "Lambda function ARN - used to grant invoke permission"
   type        = string
 }
 
