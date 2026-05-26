@@ -123,7 +123,7 @@ lambda_processor_log_group = "/aws/lambda/order-pipeline-order-processor-dev"
 
 ## Test
 
-### 1 — Basic order (triggers discount + shipping)
+### 1 - Basic order (triggers discount + shipping)
 ```powershell
 $API="https://1u9dq816q7.execute-api.us-east-1.amazonaws.com/dev/orders"
 
@@ -137,14 +137,14 @@ Expected response:
 { "order_id": "uuid-here", "message": "Order received and queued for processing" }
 ```
 
-### 2 — Free shipping threshold ($100+)
+### 2 - Free shipping threshold ($100+)
 ```powershell
 curl -X POST $API `
   -H "Content-Type: application/json" `
   -d '{"customer_name":"Reynold Mwakio","items":[{"name":"Gadget Y","qty":2,"price":99.99}],"total":199.98}'
 ```
 
-### 3 — Bundle discount (3+ distinct items)
+### 3 - Bundle discount (3+ distinct items)
 ```powershell
 curl -X POST $API `
   -H "Content-Type: application/json" `
@@ -159,7 +159,7 @@ curl -X POST $API `
   }'
 ```
 
-### 4 — Trigger fraud detection (qty > 50)
+### 4 - Trigger fraud detection (qty > 50)
 ```powershell
 curl -X POST $API `
   -H "Content-Type: application/json" `
@@ -167,14 +167,14 @@ curl -X POST $API `
 ```
 Order will be saved as status `FAILED` with `failure_reason` in DynamoDB.
 
-### 5 — Trigger total mismatch (price tampering)
+### 5 - Trigger total mismatch (price tampering)
 ```powershell
 curl -X POST $API `
   -H "Content-Type: application/json" `
   -d '{"customer_name":"Hacker","items":[{"name":"Gadget Y","qty":1,"price":99.99}],"total":1.00}'
 ```
 
-### 6 — ALB health check
+### 6 - ALB health check
 ```powershell
 curl "http://order-pipeline-dev-alb-421855079.us-east-1.elb.amazonaws.com/health"
 # {"status": "ok"}
@@ -247,7 +247,7 @@ Your code files stay intact. Re-deploy anytime with `terraform apply`.
 
 ---
 
-## What's Next — Phase 3
+## What's Next - Phase 3
 
 - **SNS + SES** - send real email confirmations on COMPLETED orders
 - **CloudWatch Alarms** - alert when DLQ receives messages (processing failures)
