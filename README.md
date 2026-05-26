@@ -1,4 +1,4 @@
-# Order Pipeline — Phase 2
+# Order Pipeline - Phase 2
 
 > **Stack:** API Gateway → Lambda (intake) → SQS → Lambda (processor) → DynamoDB (orders + inventory)
 > ALB → ASG (2× EC2 t3.micro, multi-AZ)
