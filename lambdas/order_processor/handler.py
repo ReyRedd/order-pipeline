@@ -52,7 +52,7 @@ def lambda_handler(event, _context):
             results["failed"].append(order_id)
 
         except Exception as e:
-            # Unexpected error — let SQS retry (up to maxReceiveCount, then DLQ)
+            # Unexpected error - let SQS retry (up to maxReceiveCount, then DLQ)
             print(f"[{order_id}] Unexpected error (will retry): {e}")
             raise
 
@@ -65,34 +65,34 @@ def _process_order(order: dict):
     order_id = order["order_id"]
     items    = order["items"]          # [{"name": "Widget", "qty": 2, "price": 9.99}]
 
-    # Step 1 — mark as in-progress immediately
+    # Step 1 - mark as in-progress immediately
     _update_order(order_id, {"status": "PROCESSING", "processing_started_at": _now()})
 
-    # Step 2 — fraud detection (fast, before any DB writes)
+    # Step 2 - fraud detection (fast, before any DB writes)
     fraud_result = _check_fraud(order)
     if fraud_result["flagged"]:
         raise BusinessRuleError(f"Fraud check failed: {fraud_result['reason']}")
 
-    # Step 3 — verify inventory availability (read-only, no commit yet)
+    # Step 3 - verify inventory availability (read-only, no commit yet)
     inventory = _check_inventory(items)
 
-    # Step 4 — recalculate total server-side (never trust client-submitted totals)
+    # Step 4 - recalculate total server-side (never trust client-submitted totals)
     calculated_total = _calculate_subtotal(items)
     submitted_total  = Decimal(str(order["total"]))
     _verify_total(submitted_total, calculated_total, order_id)
 
-    # Step 5 — apply discounts
+    # Step 5 - apply discounts
     discount        = _calculate_discount(calculated_total, items)
     discounted_total = calculated_total - discount
 
-    # Step 6 — calculate shipping
+    # Step 6 - calculate shipping
     shipping_cost = _calculate_shipping(discounted_total)
     final_total   = discounted_total + shipping_cost
 
-    # Step 7 — commit inventory (atomic decrement per item)
+    # Step 7 - commit inventory (atomic decrement per item)
     _commit_inventory(items, order_id)
 
-    # Step 8 — enrich order record with final computed values
+    # Step 8 - enrich order record with final computed values
     eta = datetime.now(timezone.utc) + timedelta(days=_estimate_delivery_days(shipping_cost))
     _update_order(order_id, {
         "status":            "COMPLETED",
@@ -116,16 +116,16 @@ def _check_fraud(order: dict) -> dict:
     items = order["items"]
     total = Decimal(str(order["total"]))
 
-    # Rule 1 — single item quantity over threshold
+    # Rule 1 - single item quantity over threshold
     for item in items:
         if int(item["qty"]) > 50:
             return {"flagged": True, "reason": f"Unusually high quantity ({item['qty']}) for item '{item['name']}'"}
 
-    # Rule 2 — order total suspiciously high for a single order
+    # Rule 2 - order total suspiciously high for a single order
     if total > Decimal("10000"):
         return {"flagged": True, "reason": f"Order total ${total} exceeds single-order limit of $10,000"}
 
-    # Rule 3 — negative or zero price submitted
+    # Rule 3 - negative or zero price submitted
     for item in items:
         if Decimal(str(item["price"])) <= 0:
             return {"flagged": True, "reason": f"Invalid price ({item['price']}) for item '{item['name']}'"}
@@ -236,11 +236,11 @@ def _calculate_shipping(discounted_total: Decimal) -> Decimal:
 def _estimate_delivery_days(shipping_cost: Decimal) -> int:
     """Maps shipping cost to estimated delivery window."""
     if shipping_cost == Decimal("0.00"):
-        return 3   # free shipping — 3 business days
+        return 3   # free shipping - 3 business days
     elif shipping_cost == Decimal("4.99"):
-        return 5   # economy — 5 business days
+        return 5   # economy - 5 business days
     else:
-        return 7   # standard — up to 7 business days
+        return 7   # standard - up to 7 business days
 
 
 # ── Step 7: Inventory commit ──────────────────────────────────────────────────
