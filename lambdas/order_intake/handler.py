@@ -34,10 +34,10 @@ def lambda_handler(event, _context):
             parse_float=Decimal
         )
 
-        # Step 1 — persist to DynamoDB
+        # Step 1 - persist to DynamoDB
         table.put_item(Item=order)
 
-        # Step 2 — publish to SQS for async processing
+        # Step 2 - publish to SQS for async processing
         # json.dumps can't handle Decimal, so we convert back to float for the message
         sqs.send_message(
             QueueUrl    = queue_url,
